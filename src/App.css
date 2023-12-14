@@ -134,14 +134,18 @@ label.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-disabled{
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.cuantas{
+  vertical-align:top;
+  margin-right: 12px;
 }
+.slider{
+  vertical-align: center;
+  padding-top: 0px;
+width: 300px;
+display: inline-block;
+
+}
+
 @media only screen and (max-width: 600px) {
   .css-1wnsr1i {
     width: 65%!important;

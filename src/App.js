@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Errors from './Errors';
+import Slider from '@mui/material/Slider';
 
 var ename = false;
 var esurname = false;
@@ -74,32 +75,32 @@ function App() {
 
 	const [open, setOpen] = React.useState(false);
 	const handleOpen = (event) => {
-		ename=false;
-		esurname=false;
-		ecompname=false;
-		ecompsurname=false;
+		ename = false;
+		esurname = false;
+		ecompname = false;
+		ecompsurname = false;
 		if (fromName == "") {
 			ename = true;
 		}
 		if (fromSurName == "") {
-				esurname = true;
-			}
-		if (from_companion_confirmation == "true") {
-					if (from_companionName=="") {
-						ecompname = true;
-					}
-					if (from_companionSurName == "") {
-						ecompsurname=true;
-						}
+			esurname = true;
 		}
-		if(ename ==false &&esurname==false && ecompname == false && ecompsurname== false){
+		if (from_companion_confirmation == "true") {
+			if (from_companionName == "") {
+				ecompname = true;
+			}
+			if (from_companionSurName == "") {
+				ecompsurname = true;
+			}
+		}
+		if (ename == false && esurname == false && ecompname == false && ecompsurname == false) {
 			setOpen(true);
-		}	
-		else{
+		}
+		else {
 			document.querySelector("form").focus();
 		}
-		console.log(ename+ " "+esurname+ " "+ecompname+ " "+ecompsurname)
-		
+		console.log(ename + " " + esurname + " " + ecompname + " " + ecompsurname)
+
 	};
 	const handleClose = () => setOpen(false);
 
@@ -139,32 +140,57 @@ function App() {
 		setfrom_companionSurName(event.target.value);
 	};
 
+	const [valueBus, setBusValue] = React.useState([0]);
+
+	const handleBus = (event, newValue) => {
+		setBusValue(newValue);
+	};
+
 	const [bus_confirmation, setbus_confirmation] = useState('false');
 
 	const bus_confirmation_handleInputChange = (event) => {
 		if (event.target.value == "true") {
 			setbus_confirmation("false");
+			setBusValue(0);
 		}
 		else {
 			setbus_confirmation("true");
+			
+			if(from_companion_confirmation=="true") {
+				setBusValue(2);
+			}else{
+				setBusValue(1);
+			}
 		}
 	};
 
-	const [allergies, setallergies] = useState('');
-	const allergies_handleInputChange = (event) => {
-		setallergies(event.target.value);
-	};
+	const [valueHotel, setHotelValue] = React.useState([0]);
 
+	const handleHotel = (event, newValue) => {
+		setHotelValue(newValue);
+	};
 	const [hotel_confirmation, sethotel_confirmation] = useState('false');
 
 	const hotel_confirmation_handleInputChange = (event) => {
 		if (event.target.value == "true") {
 			sethotel_confirmation("false");
+			setHotelValue(0);
 		}
 		else {
 			sethotel_confirmation("true");
+			if(from_companion_confirmation=="true") {
+				setHotelValue(2);
+			}else{
+				setHotelValue(1);
+			}
 		}
 	};
+	const [allergies, setallergies] = useState('');
+	const allergies_handleInputChange = (event) => {
+		setallergies(event.target.value);
+	};
+
+	
 
 	const [music_recomendation, setmusic_recomendation] = useState('');
 	const music_recomendation_handleInputChange = (event) => {
@@ -181,7 +207,7 @@ function App() {
 					Eduardo y Patricia
 				</span>
 				<span className='anticdidone parrafo'>
-					Hemos decidio unirnos en un enlace iónico más fuerte y para celebrarlo,<br></br> queremos que nos acompañeis el proximo.
+					Hemos decidido unirnos en un enlace iónico más fuerte y para celebrarlo,<br></br> queremos que nos acompañeis el próximo.
 				</span>
 				<br></br>
 				<span className='date'>
@@ -194,14 +220,14 @@ function App() {
 				<span className='anticdidone'>
 					Apertura de puertas a las 12:45 h
 				</span>
-				
+
 			</header>
 
 
 
 			<main>
 				<form tabIndex="-1" validate='true' autoComplete='on'>
-				<h3 >Confirma asistencia</h3>
+					<h3 >Confirma asistencia</h3>
 					<div className="newRow">
 						<TextField
 							required
@@ -219,7 +245,7 @@ function App() {
 							onChange={surName_handleInputChange}
 							value={fromSurName}
 							fullWidth
-							helperText="Ej.Garcia"
+							helperText="Ej.García"
 						/>
 					</div>
 					<FormControlLabel
@@ -246,7 +272,7 @@ function App() {
 							disabled={companionDisabled}
 							required
 							id="Apellido_acompañante"
-							label="Appellido/s acompañante"
+							label="Apellido/s acompañante"
 							onChange={from_companionSurName_handleInputChange}
 							helperText="Ej.Gisbert"
 							fullWidth
@@ -262,6 +288,20 @@ function App() {
 						defaultValue="false"
 						onChange={bus_confirmation_handleInputChange}
 					/>
+					<div>
+						<span className='cuantas'>¿Cuantas? {valueBus}</span>
+						<div className='slider'><Slider
+							disabled={bus_confirmation == "false"}
+							getAriaLabel={() => '¿Cuantas plazas quieres en el autobus?'}
+							max={10}
+							value={valueBus}
+							onChange={handleBus}
+							valueLabelDisplay="¿Cuantas plazas quieres en el autobus?"
+
+						/></div>
+					</div>
+
+
 					<FormControlLabel
 						id="hotel_confirmation"
 						value={hotel_confirmation}
@@ -271,7 +311,18 @@ function App() {
 						defaultValue="false"
 						onChange={hotel_confirmation_handleInputChange}
 					/>
+<div>
+						<span className='cuantas'>¿Cuantos sois? {valueHotel}</span>
+						<div className='slider'><Slider
+							disabled={hotel_confirmation == "false"}
+							getAriaLabel={() => '¿Cuantas personas os quedais en el hotel?'}
+							max={10}
+							value={valueHotel}
+							onChange={handleHotel}
+							valueLabelDisplay="¿Cuantas personas os quedais en el hotel?"
 
+						/></div>
+					</div>
 					<div className="newRow">
 						<TextField
 							id="alergia"
@@ -286,7 +337,7 @@ function App() {
 					<div className="newRow">
 						<TextField
 							id="musica"
-							label="¿Que música te gustaria escuchar?"
+							label="¿Que música te gustaría escuchar?"
 							helperText="Ej.Jazz"
 							multiline
 							maxRows={8}
@@ -344,13 +395,13 @@ function App() {
 						</Modal>
 					</div>
 					<br></br>
-					<Errors value={fromName==""} additionalValue="true" fieldname="tu nombre"></Errors>
-					<Errors value={fromSurName==""} additionalValue="true" fieldname="tus apellidos"></Errors>
-					<Errors value={from_companionName==""} additionalValue={from_companion_confirmation} fieldname="el nombre de tu acompañante"></Errors>
-					<Errors value={from_companionSurName==""} additionalValue={from_companion_confirmation} fieldname="los apellidos de tu acompañante"></Errors>
+					<Errors value={fromName == ""} additionalValue="true" fieldname="tu nombre"></Errors>
+					<Errors value={fromSurName == ""} additionalValue="true" fieldname="tus apellidos"></Errors>
+					<Errors value={from_companionName == ""} additionalValue={from_companion_confirmation} fieldname="el nombre de tu acompañante"></Errors>
+					<Errors value={from_companionSurName == ""} additionalValue={from_companion_confirmation} fieldname="los apellidos de tu acompañante"></Errors>
 					<br></br>
 					<div className='confirmarbtn'>
-						<Button  onClick={handleOpen}>Confirmar</Button>
+						<Button onClick={handleOpen}>Confirmar</Button>
 					</div>
 				</form>
 
